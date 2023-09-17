@@ -16,10 +16,16 @@ export class Modal extends Component {
     }
   };
 
+  handleBackdropClick = event => {
+    if (event.currentTarget === event.target) {
+      this.props.onClose();
+    }
+  };
+
   render() {
     const { largeImageURL, tags } = this.props;
     return (
-      <div className={style.overlay}>
+      <div className={style.overlay} onClick={this.handleBackdropClick}>
         <div className={style.modal}>
           <img src={largeImageURL} alt={tags} />
         </div>
