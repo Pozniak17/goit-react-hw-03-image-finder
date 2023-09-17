@@ -21,26 +21,27 @@ export class ImageGalleryItem extends Component {
   };
 
   toggleModal = () => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal,
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
     }));
   };
   render() {
     const { id, webformatURL, tags, largeImageURL } = this.props;
-    console.log(tags);
+    const { showModal } = this.state;
     return (
-      <li
-        key={id}
-        className={style.imageGalleryItem}
-        onClick={this.toggleModal}
-      >
+      <li key={id} className={style.imageGalleryItem}>
         <img
           src={webformatURL}
           alt={tags}
           className={style.imageGalleryItemImage}
+          onClick={this.toggleModal}
         />
-        {this.state.showModal && (
-          <Modal largeImageURL={largeImageURL} tags={tags} />
+        {showModal && (
+          <Modal
+            onClose={this.toggleModal}
+            largeImageURL={largeImageURL}
+            tags={tags}
+          />
         )}
       </li>
     );
