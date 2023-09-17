@@ -4,16 +4,28 @@ import { FcSearch } from 'react-icons/fc';
 
 export class Seachbar extends Component {
   state = {
-    name: '',
+    query: '',
   };
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.onSubmit({ ...this.state });
+
+    // перевірка на пустий рядок
+    if (this.state.query.trim() === '') {
+      alert('Add valid text');
+      return;
+    }
+    this.props.onSubmit(this.state.query);
+
+    this.reset();
   };
 
-  handleChange = event => {
-    this.setState({ name: event.target.value });
+  reset = () => {
+    this.setState({ query: '' });
+  };
+
+  handleInputChange = event => {
+    this.setState({ query: event.target.value.toLowerCase() });
   };
 
   render() {
@@ -25,8 +37,8 @@ export class Seachbar extends Component {
           </button>
 
           <input
-            onChange={this.handleChange}
-            value={this.state.name}
+            onChange={this.handleInputChange}
+            value={this.state.query}
             className={style.searchFormInput}
             type="text"
             autoComplete="off"
