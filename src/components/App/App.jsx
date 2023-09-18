@@ -55,7 +55,7 @@ export class App extends Component {
     const { images, query, isLoading, error } = this.state;
     return (
       <>
-        {error && <h1>Whoops, something went wrong: {error.message}</h1>}
+        {error && <h1>Whoops, something went wrong</h1>}
         <Seachbar onSubmit={this.handleFormSubmit} />
         {isLoading ? <Loader /> : <ImageGallery data={images} />}
         {query && <Button onClick={this.handleLoadMore}>Load more</Button>}
