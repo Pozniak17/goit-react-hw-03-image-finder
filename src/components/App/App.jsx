@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Component } from 'react';
-import { Seachbar } from './Searchbar/Searchbar';
-import { ImageGallery } from './ImageGallery/ImageGallery';
-import { Loader } from './Loader/Loader';
-import { Button } from './Button/Button';
-// import { Grid } from 'react-loader-spinner';
+import { Seachbar } from '../Searchbar/Searchbar';
+import { ImageGallery } from '../ImageGallery/ImageGallery';
+import { Loader } from '../Loader/Loader';
+
+import { Button } from './App.styled';
 
 const KEY = '28544484-259b47bf7f7000ebfc4f498cb';
 // axios.defaults.baseURL = `https://pixabay.com/api/?key=${KEY}&q=cat&image_type=photo`;
@@ -13,7 +13,7 @@ export class App extends Component {
   state = {
     query: '',
     images: [],
-    page: 2,
+    page: 1,
     largeImage: '',
     isLoading: false,
     // error: null,
@@ -43,19 +43,18 @@ export class App extends Component {
     this.setState({ query });
   };
 
-  handleLargeImageSubmit = largeImage => {
-    this.setState({ largeImage });
+  handleLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
   render() {
-    const { images, isLoading, error } = this.state;
-    // console.log(images);
+    const { images, query, isLoading, error } = this.state;
     return (
       <>
         {error && <h1>Whoops, something went wrong: {error.message}</h1>}
         <Seachbar onSubmit={this.handleFormSubmit} />
         {isLoading ? <Loader /> : <ImageGallery data={images} />}
-        <Button>Load more</Button>
+        {query && <Button onClick={this.handleLoadMore}>Load more</Button>}
       </>
     );
   }
