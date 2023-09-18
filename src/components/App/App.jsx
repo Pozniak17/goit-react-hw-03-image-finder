@@ -16,23 +16,24 @@ export class App extends Component {
     page: 1,
     largeImage: '',
     isLoading: false,
+    quantityOnPage: 12,
     // error: null,
     // showModal: true,
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { query, page } = this.state;
+    const { query, page, quantityOnPage } = this.state;
 
     // перевіряємо попереднє і поточне ім'я
     if (page !== prevState.page || query !== prevState.query) {
       try {
         this.setState({ isLoading: true });
         const response = await axios.get(
-          `https://pixabay.com/api/?q=${query}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
+          `https://pixabay.com/api/?q=${query}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${quantityOnPage}`
         );
         this.setState({ images: response.data.hits });
       } catch (error) {
-        this.setState({ error });
+        console.log(error.message);
       } finally {
         this.setState({ isLoading: false });
       }
@@ -44,7 +45,10 @@ export class App extends Component {
   };
 
   handleLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+      quantityOnPage: prevState.quantityOnPage + 12,
+    }));
   };
 
   render() {
