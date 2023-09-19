@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import style from '../style.module.css';
 import { FcSearch } from 'react-icons/fc';
+import toast from 'react-hot-toast';
 
 export class Seachbar extends Component {
   state = {
@@ -12,7 +13,15 @@ export class Seachbar extends Component {
 
     // перевірка на пустий рядок
     if (this.state.query.trim() === '') {
-      alert('Add valid text');
+      toast('Add valid text!', {
+        icon: '☝️',
+        style: {
+          margin: '70px',
+          borderRadius: '10px',
+          background: '#c11919',
+          color: '#fff',
+        },
+      });
       return;
     }
     this.props.onSubmit(this.state.query);
