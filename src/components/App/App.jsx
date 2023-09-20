@@ -21,6 +21,10 @@ export class App extends Component {
     // showModal: true,
   };
 
+  // componentDidMount() {
+  //   this.setState({ images: [] });
+  // }
+
   async componentDidUpdate(prevProps, prevState) {
     const { query, page, quantityOnPage } = this.state;
 
@@ -43,7 +47,12 @@ export class App extends Component {
   }
 
   handleFormSubmit = query => {
-    this.setState({ query });
+    if (this.state.query !== query) {
+      this.setState({
+        query,
+        page: 1,
+      });
+    }
   };
 
   handleLoadMore = () => {
