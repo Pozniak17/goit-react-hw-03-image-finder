@@ -1,9 +1,9 @@
-import style from '../style.module.css';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { List } from './ImageGallery.styled';
 
 export const ImageGallery = ({ data }) => {
   return (
-    <ul className={style.imageGallery}>
+    <List>
       {data.map(({ id, webformatURL, largeImageURL, tags }) => (
         <ImageGalleryItem
           key={id}
@@ -12,6 +12,6 @@ export const ImageGallery = ({ data }) => {
           largeImageURL={largeImageURL}
         />
       ))}
-    </ul>
+    </List>
   );
 };

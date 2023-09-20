@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import style from '../style.module.css';
+import { Overlay, ModalWindow } from './Modal.styled';
 
 export class Modal extends Component {
   componentDidMount() {
@@ -25,11 +25,11 @@ export class Modal extends Component {
   render() {
     const { largeImageURL, tags } = this.props;
     return (
-      <div className={style.overlay} onClick={this.handleBackdropClick}>
-        <div className={style.modal}>
+      <Overlay onClick={this.handleBackdropClick}>
+        <ModalWindow>
           <img src={largeImageURL} alt={tags} />
-        </div>
-      </div>
+        </ModalWindow>
+      </Overlay>
     );
   }
 }

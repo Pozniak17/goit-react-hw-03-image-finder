@@ -1,6 +1,4 @@
-// import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
-
 import { Component } from 'react';
 import { Seachbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
@@ -17,7 +15,6 @@ export class App extends Component {
     isLoading: false,
     quantityOnPage: 12,
     // error: null,
-    // showModal: true,
   };
 
   // componentDidMount() {
@@ -59,18 +56,19 @@ export class App extends Component {
   handleLoadMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
-      // quantityOnPage: prevState.quantityOnPage + 12,
     }));
   };
 
   render() {
-    const { images, query, isLoading, error } = this.state;
+    const { images, isLoading, error } = this.state;
     return (
       <>
         {error && <h1>Whoops, something went wrong</h1>}
         <Seachbar onSubmit={this.handleFormSubmit} />
         {isLoading ? <Loader /> : <ImageGallery data={images} />}
-        {query && <Button onClick={this.handleLoadMore}>Load more</Button>}
+        {images.length > 0 && (
+          <Button onClick={this.handleLoadMore}>Load more</Button>
+        )}
         {/* {isLoading ? (<Loader />) : (<ImageGallery data={images} /> && (<Button onClick={this.handleLoadMore}>Load more</Button>))} */}
         <Toaster position="top-center" />
       </>

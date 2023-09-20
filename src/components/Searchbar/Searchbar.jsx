@@ -1,7 +1,13 @@
-import { Component } from 'react';
-import style from '../style.module.css';
 import { FcSearch } from 'react-icons/fc';
 import toast from 'react-hot-toast';
+import { Component } from 'react';
+// import style from '../style.module.css';
+import {
+  SearchBarHeader,
+  SearchForm,
+  SearchFormButton,
+  SearchFormInput,
+} from './Seachbar.styled';
 
 export class Seachbar extends Component {
   state = {
@@ -39,23 +45,22 @@ export class Seachbar extends Component {
 
   render() {
     return (
-      <header className={style.searchbar}>
-        <form className={style.searchForm} onSubmit={this.handleSubmit}>
-          <button type="submit" className={style.searchFormButton}>
+      <SearchBarHeader>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit">
             <FcSearch size="26px" />
-          </button>
+          </SearchFormButton>
 
-          <input
+          <SearchFormInput
             onChange={this.handleInputChange}
             value={this.state.query}
-            className={style.searchFormInput}
             type="text"
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
           />
-        </form>
-      </header>
+        </SearchForm>
+      </SearchBarHeader>
     );
   }
 }
