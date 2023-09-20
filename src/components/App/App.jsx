@@ -13,34 +13,36 @@ export class App extends Component {
     page: 1,
     largeImage: '',
     isLoading: false,
-    quantityOnPage: 12,
-    // error: null,
+    error: null,
+    total: 0,
   };
 
-  // componentDidMount() {
-  //   this.setState({ images: [] });
-  // }
-
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
 
     // перевіряємо попереднє і поточне ім'я
     if (page !== prevState.page || query !== prevState.query) {
-      try {
-        this.setState({ isLoading: true });
-
-        // передаємо запит та сторінку та сторінку функцію запиту
-        const ImageResponse = await articlesWithQuery(query, page);
-        this.setState(prevState => ({
-          images: [...prevState.images, ...ImageResponse],
-        }));
-      } catch (error) {
-        console.log(error.message);
-      } finally {
-        this.setState({ isLoading: false });
-      }
+      this.getPhotos(query, page);
     }
   }
+  getPhotos = async (query, page) => {
+    this.setState({ isLoading: true });
+    try {
+      // передаємо запит та сторінку та сторінку функцію запиту
+      const { hits, totalHits } = await articlesWithQuery(query, page);
+      if (hits.length === 0) {
+        return alert('We dont find');
+      }
+      this.setState(prevState => ({
+        images: [...prevState.images, ...hits],
+        total: totalHits,
+      }));
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
 
   // коли запит відрізняється, з cat=>dog, записуємо новий запит, images та page скидуємо
   handleFormSubmit = query => {
@@ -60,16 +62,19 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isLoading, error } = this.state;
+    const { images, isLoading, error, total } = this.state;
+    const allPage = total / images.length;
     return (
       <>
         {error && <h1>Whoops, something went wrong</h1>}
         <Seachbar onSubmit={this.handleFormSubmit} />
-        {isLoading ? <Loader /> : <ImageGallery data={images} />}
-        {images.length > 0 && (
+        {isLoading && <Loader />}
+        {images.length > 0 && <ImageGallery data={images} />}
+
+        {allPage > 1 && !isLoading && images.length > 0 && (
           <Button onClick={this.handleLoadMore}>Load more</Button>
         )}
-        {/* {isLoading ? (<Loader />) : (<ImageGallery data={images} /> && (<Button onClick={this.handleLoadMore}>Load more</Button>))} */}
+        {/* {isLoading ? (<Loader />) : ( && (<Button onClick={this.handleLoadMore}>Load more</Button>))} */}
         <Toaster position="top-center" />
       </>
     );

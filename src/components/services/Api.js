@@ -15,6 +15,7 @@ export const articlesWithQuery = async (query, page) => {
     },
   };
 
-  const response = await axios.get(URL, options);
-  return response.data.hits;
+  const { data } = await axios.get(URL, options);
+  // console.log(response.data.hits); // тут в нас 12 масивів об'єктів зображень та їх данних
+  return data;
 };
