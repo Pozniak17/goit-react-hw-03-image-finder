@@ -1,13 +1,12 @@
-import axios from 'axios';
+// import axios from 'axios';
+import { Toaster } from 'react-hot-toast';
+
 import { Component } from 'react';
 import { Seachbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { Loader } from '../Loader/Loader';
-
 import { Button } from './App.styled';
-import { Toaster } from 'react-hot-toast';
-const KEY = '28544484-259b47bf7f7000ebfc4f498cb';
-// axios.defaults.baseURL = `https://pixabay.com/api/?key=${KEY}&q=cat&image_type=photo`;
+import { articlesWithQuery } from 'components/services/Api';
 
 export class App extends Component {
   state = {
@@ -26,17 +25,17 @@ export class App extends Component {
   // }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { query, page, quantityOnPage } = this.state;
+    const { query, page } = this.state;
 
     // перевіряємо попереднє і поточне ім'я
     if (page !== prevState.page || query !== prevState.query) {
       try {
         this.setState({ isLoading: true });
-        const response = await axios.get(
-          `https://pixabay.com/api/?q=${query}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${quantityOnPage}`
-        );
+
+        // передаємо запит та сторінку та сторінку функцію запиту
+        const ImageResponse = await articlesWithQuery(query, page);
         this.setState(prevState => ({
-          images: [...prevState.images, ...response.data.hits],
+          images: [...prevState.images, ...ImageResponse],
         }));
       } catch (error) {
         console.log(error.message);
@@ -46,10 +45,12 @@ export class App extends Component {
     }
   }
 
+  // коли запит відрізняється, з cat=>dog, записуємо новий запит, images та page скидуємо
   handleFormSubmit = query => {
     if (this.state.query !== query) {
       this.setState({
         query,
+        images: [],
         page: 1,
       });
     }
